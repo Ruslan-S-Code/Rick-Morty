@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@font-face {
+  font-family: "Get Schwifty";
+  src: url("/src/get_schwifty.ttf") format("truetype"); /* Поднимаемся на уровень выше */
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1 {
+  font-family: "Get Schwifty";
+}
+
+#characterName,
+#size-buttons {
+  font-family: "Get Schwifty", cursive !important;
+}

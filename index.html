@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interdimensional Shirts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="/src/main.ts"></script>
+  <link rel="stylesheet" href="./src/style.css">
+
+</head>
+
+<body class="bg-gray-100">
+  <div class="max-w-6xl mx-auto p-4" style="background-image: url('/src/img/rmback.webp'); 
+            background-size: 75%;
+            background-position: center; ">
+
+
+    <!-- Header -->
+    <header class="flex items-center justify-between py-14 px-6">
+
+      <!-- Логотип -->
+      <h1 class="text-7xl font-schwifty text-[#00ff00] uppercase tracking-widest drop-shadow-md">
+        Rick & Morty T-Shirts
+      </h1>
+
+      <!-- Кнопка корзины -->
+      <button id="cart-button"
+        class="relative text-3xl text-gray-800 p-3 bg-gray-200 rounded-full shadow-md w-12 h-12 flex items-center justify-center">
+
+        🛒
+        <!-- Значок количества товаров -->
+        <span id="cart-count"
+          class="absolute top-0 right-0 text-xs bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center">
+          0
+        </span>
+      </button>
+    </header>
+
+    <!-- Затемняющий фон (оверлей) -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 opacity-0 invisible transition-opacity duration-300 z-40">
+    </div>
+
+    <!-- Слайдбар корзины -->
+    <div id="cart-sidebar"
+      class="fixed top-0 right-[-100%] w-80 h-full bg-white shadow-lg p-4 transition-transform duration-300 z-50">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">🛍️ Warenkorb</h2>
+        <button id="close-cart" class="text-2xl text-gray-500 hover:text-red-500">
+          ❌
+        </button>
+      </div>
+
+      <ul id="cart-items" class="space-y-2 text-gray-700"></ul>
+      <hr class="my-2">
+      <div class="flex justify-between font-bold text-lg">
+        <span>Gesamt:</span>
+        <span id="cart-total">0.00€</span>
+      </div>
+
+      <!-- Поле для ввода купона -->
+      <div class="mt-4">
+        <label for="couponCode" class="block text-sm font-medium text-gray-700">Haben Sie einen Gutschein?</label>
+        <div class="flex mt-1">
+          <input type="text" id="couponCode" placeholder="Gutscheincode eingeben" class="p-2 border rounded-md w-full">
+          <button id="applyCoupon" class="ml-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            Einlösen
+          </button>
+        </div>
+        <p id="couponMessage" class="text-sm mt-2 text-green-600 hidden">✅ Gutschein erfolgreich angewendet!</p>
+        <p id="couponError" class="text-sm mt-2 text-red-600 hidden">❌ Ungültiger Gutscheincode!</p>
+      </div>
+
+
+      <!-- Кнопка оплаты -->
+      <button id="checkout-button" class="mt-4 w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600">
+        Jetzt bezahlen
+      </button>
+    </div>
+
+    <!-- Search and Filters -->
+    <div id="search-input" class="bg-gray-300 p-4 mb-4 rounded-md flex gap-4 justify-between">
+      <input type="text" placeholder="Suchfeld"
+        class="p-2 rounded-md flex-1 bg-white text-black border border-gray-400 focus:border-green-400 focus:ring-2 focus:ring-green-300">
+      <button class="bg-white px-4 py-2 rounded-md">Filter 1</button>
+      <button class="bg-white px-4 py-2 rounded-md">Filter 2</button>
+    </div>
+
+
+    <!-- Product Grid -->
+    <!-- Product Thumbnails (с прокруткой) -->
+    <div class="w-full max-w-6xl mx-auto p-2 bg-white rounded-md shadow-md flex overflow-visible"
+      id="thumbnails-container">
+      <div id="thumbnails" class="flex gap-2 w-full overflow-x-auto min-h-[150px] items-center px-4"></div>
+    </div>
+
+    <div class="gap-4 mt-5">
+
+
+      <!-- Main Product -->
+      <div class="col-span-4 flex gap-4 justify-center w-full max-w-9xl mx-auto h-100 overflow-hidden">
+
+
+        <!-- Передняя сторона футболки -->
+        <div class="relative w-96 h-96 flex items-center justify-center">
+          <img id="frontTshirt" src="/src/img/tshirtfront.png" class="rounded-md w-full h-full object-cover">
+          <img id="overlayImage" src=""
+            class="absolute top-1/3 left-1/2 w-32 h-32 object-contain transform -translate-x-1/2 -translate-y-1/3 hidden">
+        </div>
+
+        <!-- Задняя сторона футболки -->
+        <div class="relative w-96 h-96 flex items-center justify-center">
+          <img id="backTshirt" src="/src/img/tshirtback.png" class="rounded-md w-full h-full object-cover">
+          <div id="characterName"
+            class="absolute top-1/4 left-1/2 transform -translate-x-1/2 text-black font-bold text-2xl px-6 py-3 rounded-md hidden text-center leading-tight">
+            Character Name
+          </div>
+        </div>
+
+        <!-- Выбор размера и кнопка добавления в корзину -->
+        <div>
+          <div class="w-full min-h-52 bg-gray-200 rounded-md flex flex-col text-lg font-bold p-4">
+            <span id="selectedCharacterName" class="text-left">Character Name</span>
+          </div>
+
+
+          <!-- Блок информации о персонаже -->
+          <div id="selectedCharacterInfo" class="mt-4 text-lg text-gray-700"></div>
+
+          <!-- Кнопки выбора размера -->
+          <div id="size-buttons" class="mt-4 text-2xl font-bold gap-4 max-w-4xl">
+
+
+            <button class="size-button bg-gray-100 border p-2 px-4 rounded-md flex-grow" data-size="S"
+              data-price="11.99">S</button>
+            <button class="size-button bg-gray-100 border p-2 px-4 rounded-md flex-grow" data-size="M"
+              data-price="12.99">M</button>
+            <button class="size-button bg-gray-100 border p-2 px-4 rounded-md flex-grow" data-size="L"
+              data-price="15.99">L</button>
+            <button class="size-button bg-gray-100 border p-2 px-4 rounded-md flex-grow" data-size="XL"
+              data-price="15.99">XL</button>
+            <button class="size-button bg-gray-100 border p-2 px-4 rounded-md flex-grow" data-size="XXL"
+              data-price="14.99">XXL</button>
+          </div>
+
+          <!-- Меняем цвет футболки -->
+          <div class="flex items-center justify-between w-full mt-6 h-12">
+            <button id="toggleColor" class="bg-gray-800 text-white px-4 py-2 rounded-md">
+              Farbe wechseln
+            </button>
+
+            <!-- Цена выбранного размера -->
+            <div class="text-lg font-bold flex gap-2 text-white">
+              <span>Preis:</span> <span id="selected-price" class="ml-1">0.00</span>€
+            </div>
+          </div>
+
+          <!-- Кнопка добавления в корзину -->
+          <button id="add-to-cart"
+            class="mt-4 bg-green-500 text-white px-6 py-2 rounded-md w-full font-bold hover:bg-green-600">
+            AB IN DEN WARENKORB
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
