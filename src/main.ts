@@ -15,6 +15,8 @@ interface Character {
   origin: { name: string };
 }
 
+// const cart = [];
+
 // 🔍 **Функция загрузки персонажей с API**
 async function loadCharacters(searchTerm: string = "") {
   try {
@@ -198,6 +200,7 @@ function setupEventListeners() {
     ) as HTMLElement;
 
     const cartItem = document.createElement("li");
+
     cartItem.classList.add(
       "flex",
       "justify-between",
@@ -207,7 +210,9 @@ function setupEventListeners() {
     );
     cartItem.innerHTML = `
       <span class="w-3/5">${characterName} (${selectedSize})</span>
-      <span class="text-right w-1/5">${selectedPrice.toFixed(2)}€</span>
+      <span class="text-right w-1/5 item-price">${selectedPrice.toFixed(
+        2
+      )}€</span>
       <button class="remove-item text-red-500 hover:text-red-700 text-xl font-bold ml-4">❌</button>
     `;
     cartItemsContainer.appendChild(cartItem);
@@ -255,12 +260,13 @@ function updateCartTotal() {
   const cartCountElement = document.getElementById("cart-count")!;
   const couponMessage = document.getElementById("couponMessage")!;
   const couponError = document.getElementById("couponError")!;
-
   const cartItems = cartItemsContainer.querySelectorAll("li");
+
   let total = 0;
 
   cartItems.forEach((item) => {
-    const priceText = item.querySelector("span:nth-child(4)")?.textContent; // Изменено на 4-й span (где цена)
+    const priceText = item.querySelector(".item-price")?.textContent; // Изменено на 4-й span (где цена)
+    console.log(priceText);
     if (priceText) {
       total += parseFloat(priceText.replace("€", "").trim());
     }
